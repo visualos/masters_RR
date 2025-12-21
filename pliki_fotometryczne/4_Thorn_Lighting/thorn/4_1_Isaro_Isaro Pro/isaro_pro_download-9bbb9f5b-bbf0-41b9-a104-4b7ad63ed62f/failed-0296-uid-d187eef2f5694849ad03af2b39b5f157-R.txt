@@ -1,0 +1,21 @@
+Data retrieval exception.
+
+Context Type: PDB Article
+Extractor name: pdbdownload
+Fileinfo:
+{
+    "article_id": 344893, 
+    "extractor": "pdbdownload", 
+    "filename_remote": "1", 
+    "mode_id": 21, 
+    "type": "10021", 
+    "uid": "d187eef2f5694849ad03af2b39b5f157"
+}
+
+Settings:
+{
+    "email": "mazurk.jac@gmail.com", 
+    "ignore_duplicates": true, 
+    "ignore_failed": true, 
+    "language": "en"
+}
