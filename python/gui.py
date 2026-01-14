@@ -95,6 +95,7 @@ class AnalyzerGUI:
 
     # ---------------------------- 📊📊📊 RESULTS WINDOW SETUP 📊📊📊------------------------------- #
     def start_results_window(self):
+        self.calculator.calculate_results()
         results_window = Toplevel(self.window)
         results_window.title("Opracowane dane oświetleniowe")
         results_window.config(padx=40, pady=30, bg=YELLOW)
