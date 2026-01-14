@@ -1,50 +1,33 @@
-import pandas as pd
-import os
+def setup_main_window(self):
+    self.canvas = Canvas(self.window, width=640, height=512, bg=YELLOW, highlightthickness=0)  # CANVAS-PŁÓTNO
 
-# Ścieżka do pliku wejściowego
-base_path = os.path.dirname(__file__)
-file_path = os.path.join(base_path, '..', 'relux', 'relux_calc', 'sprawdzam_obrot_ies_philips.Road 1.street.batch.csv')
+    self.latarnie_img = PhotoImage(file="./images/latarnie.png")  # wczytanie obrazka
+    self.canvas.create_image(320, 256, image=self.latarnie_img)  # POZYCJA X, Y TO POŁOWA WIELKOŚCI OBRAZKA
+    self.canvas.grid(row=1, column=1)  # pozycja obrazka w oknie
 
+    title_label = Label(
+        self.window, text="Analizer wyników oświetleniowych (RELUX)", bg=YELLOW, fg=GREEN,
+        font=(FONT_NAME, 20, "bold")
+    )  # tytuł napisu nad obrazkiem
+    title_label.grid(row=0, column=1)  # pozycja napisu nad obrazkiem
 
-def filter_and_save_all_columns(path):
-    try:
-        # 1. Wczytanie danych z zachowaniem oryginalnej struktury
-        df = pd.read_csv(path, sep=';', encoding='cp1250', decimal=',')
+    start_button = Button(
+        self.window, width=7, height=2, text="Start", command=self.start_results_window
+    )  # przycisk start_button, inicjacja
+    start_button.grid(row=2, column=0)  # pozycja przycisku start_button w oknie
 
-        # Czyszczenie nazw kolumn (usuwa ukryte spacje, które Relux dodaje do nagłówków)
-        df.columns = df.columns.str.strip()
+    reset_button = Button(
+        self.window, width=7, height=2, text="Reset"
+    )  # tu w nawiasie wstawisz command= i nazwa funkcji która coś robi )
+    reset_button.grid(row=2, column=2)  # pozycja przycisku reset_button w oknie
 
-        # 2. Parametry filtrowania
-        target_luminaire = "BGP290 T25 LED50-1F/740 PSD DM10 FG"
-        target_width = 10.0
+    select_folder_button = Button(
+        self.window, text="Wybierz folder z plikami .csv", command=self.select_csv_folder,
+        bg=GREEN, font=(FONT_NAME, 12)
+    )
+    select_folder_button.grid(row=3, column=1, pady=10)
 
-        # 3. Filtrowanie wierszy (zachowujemy wszystkie kolumny)
-        filtered_df = df[
-            (df['Ldc name'].str.contains(target_luminaire, na=False)) &
-            (df['Road W[m]'] == target_width)
-            ]
-
-        if filtered_df.empty:
-            print(f"Nie znaleziono danych dla oprawy '{target_luminaire}' przy szerokości {target_width}m.")
-        else:
-            # 4. Zapis do pliku test.csv - wszystkie kolumny
-            output_file = os.path.join(base_path, 'test.csv')
-
-            # Zapisujemy cały obiekt filtered_df (wszystkie 30+ kolumn)
-            filtered_df.to_csv(output_file, sep=';', encoding='cp1250', decimal=',', index=False)
-
-            print(f"--- Sukces! ---")
-            print(f"Znaleziono wierszy: {len(filtered_df)}")
-            print(f"Liczba kolumn w pliku wyjściowym: {len(filtered_df.columns)}")
-            print(f"Plik został zapisany tutaj: {output_file}")
-
-            # Opcjonalnie: podgląd pierwszych kilku kolumn w konsoli
-            print("\nPodgląd danych (pierwsze 5 kolumn):")
-            print(filtered_df.iloc[:, :5].to_string(index=False))
-
-    except Exception as e:
-        print(f"Wystąpił błąd podczas przetwarzania: {e}")
-
-
-if __name__ == "__main__":
-    filter_and_save_all_columns(file_path)
+    self.folder_label = Label(
+        self.window, text="", bg=YELLOW, fg=PINK, font=(FONT_NAME, 10), justify=LEFT, anchor="w"
+    )  # poprawienie wyglądu labela
+    self.folder_label.grid(row=4, column=1, pady=5)

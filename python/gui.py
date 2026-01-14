@@ -11,13 +11,13 @@ YELLOW = "#f7f5dd"
 FONT_NAME = "Courier"
 
 
-# ---------------------------- 🖼️🖼️🖼️ AnalyzerGUI 🖼️🖼️🖼️------------------------------- #
+# ---------------------------- 🖼️🖼️🖼️ Main GUI Setup🖼️🖼️🖼️------------------------------- #
 class AnalyzerGUI:
     def __init__(self, calculator):  # Dodajemy parametr calculator
         self.folder_label = None
         self.latarnie_img = None
         self.canvas = None
-        self.window = Tk()  # TWORZENIE GŁÓWNEGO OKNA
+        self.window = Tk()  # TWORZENIE GŁÓWNEGO OKNA AnalyzerGUI
         self.calculator = calculator  # Zapisujemy go w klasie
         self.window.title("ReluxLightAnalyzer")  # TYTUŁ GŁÓWNEGO OKNA. TYLKO JEDNO W PROJEKCIE!!!
         self.window.config(padx=40, pady=30, bg=YELLOW)
@@ -26,23 +26,23 @@ class AnalyzerGUI:
         self.setup_main_window()
 
     def setup_main_window(self):
-        self.canvas = Canvas(self.window, width=640, height=512, bg=YELLOW, highlightthickness=0)  # CANVAS TWORZY CZYSTE PŁÓTNO
+        self.canvas = Canvas(self.window, width=640, height=512, bg=YELLOW, highlightthickness=0)  # CANVAS - TWORZY CZYSTE PŁÓTNO
 
         self.latarnie_img = PhotoImage(file="./images/latarnie.png")  # wczytanie obrazka
         self.canvas.create_image(320, 256, image=self.latarnie_img)  # POZYCJA X, Y TO POŁOWA WIELKOŚCI OBRAZKA Z GÓRY
         self.canvas.grid(row=1, column=1)  # pozycja obrazka w oknie
 
-        timer = Label(self.window, text="Analizer wyników oświetleniowych (RELUX)", bg=YELLOW, fg=GREEN,
+        title_label = Label(self.window, text="Analizer wyników oświetleniowych (RELUX)", bg=YELLOW, fg=GREEN,
                       font=(FONT_NAME, 20, "bold"))  # tytuł napisu nad obrazkiem
-        timer.grid(row=0, column=1)  # pozycja napisu nad obrazkiem
+        title_label.grid(row=0, column=1)  # pozycja napisu nad obrazkiem
 
-        start = Button(self.window, width=7, height=2, text="Start",
-                       command=self.start_results_window)  # przycisk start, inicjacja
-        start.grid(row=2, column=0)  # pozycja przycisku start w oknie
+        start_button = Button(self.window, width=7, height=2, text="Start",
+                       command=self.start_results_window)  # przycisk start_button, inicjacja
+        start_button.grid(row=2, column=0)  # pozycja przycisku start_button w oknie
 
-        reset = Button(self.window, width=7, height=2,
+        reset_button = Button(self.window, width=7, height=2,
                        text="Reset")  # tu w nawiasie wstawisz command= i nazwa funkcji która coś robi )
-        reset.grid(row=2, column=2)  # pozycja przycisku reset w oknie
+        reset_button.grid(row=2, column=2)  # pozycja przycisku reset_button w oknie
 
         select_folder_button = Button(self.window, text="Wybierz folder z plikami .csv", command=self.select_csv_folder,
                                       bg=GREEN, font=(FONT_NAME, 12))
@@ -52,7 +52,7 @@ class AnalyzerGUI:
                                   anchor="w")  # poprawienie wyglądu labela
         self.folder_label.grid(row=4, column=1, pady=5)
 
-    # ---------------------------- 📂📂📂 FOLDER SELECTION 📂📂📂------------------------------- #
+    # ---------------------------- 📂📂📂 select_folder_button - Function 📂📂📂------------------------------- #
     def select_csv_folder(self):
         # 1. Otwarcie okna dialogowego wyboru folderu
         folder_path = filedialog.askdirectory(
@@ -93,9 +93,14 @@ class AnalyzerGUI:
                     fg=RED  # Zmieniamy kolor na czerwony, żeby ostrzec użytkownika
                 )
 
-    # ---------------------------- 📊📊📊 RESULTS WINDOW SETUP 📊📊📊------------------------------- #
+    # ---------------------------- 📊📊📊 Results GUI Setup 📊📊📊------------------------------- #
     def start_results_window(self):
-        self.calculator.calculate_results()
+        self.folder_label.config(
+            text=f"Kliknięto start. Prowadzę obliczenia. Czekaj...",
+            fg=GREEN  # Zmieniamy kolor na zielony, jeśli pliki są obecne
+        )
+        self.calculator.calculate_results() # 📊 wykonywanie obliczeń (mózg operacji w pliku analysis.py) 📊
+
         results_window = Toplevel(self.window)
         results_window.title("Opracowane dane oświetleniowe")
         results_window.config(padx=40, pady=30, bg=YELLOW)
@@ -141,7 +146,7 @@ class AnalyzerGUI:
                            font=(FONT_NAME, 12))
         button_10.grid(row=4, column=1, padx=10, pady=10)
 
-    # ---------------------------- ⏯️⏯️⏯️ BUTTON FUNCTIONS ⏯️⏯️⏯️------------------------------- #
+    # ---------------------------- ⏯️⏯️⏯️ Results Buttons Functions Setup ⏯️⏯️⏯️------------------------------- #
     def function_1(self):
         print("Function 1 został kliknięty")
         # Tutaj dodaj kod dla function_1 - odnośnik do analysis.py
