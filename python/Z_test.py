@@ -1,33 +1,87 @@
-def setup_main_window(self):
-    self.canvas = Canvas(self.window, width=640, height=512, bg=YELLOW, highlightthickness=0)  # CANVAS-PŁÓTNO
+import tkinter as tk
 
-    self.latarnie_img = PhotoImage(file="./images/latarnie.png")  # wczytanie obrazka
-    self.canvas.create_image(320, 256, image=self.latarnie_img)  # POZYCJA X, Y TO POŁOWA WIELKOŚCI OBRAZKA
-    self.canvas.grid(row=1, column=1)  # pozycja obrazka w oknie
+# --- KONFIGURACJA ---
+BLACK = "#000000"
+PINK = "#e2979c"
+RED = "#e7305b"
+GREEN = "#9bdeac"
+YELLOW = "#f7f5dd"
+FONT_NAME = "Courier"
 
-    title_label = Label(
-        self.window, text="Analizer wyników oświetleniowych (RELUX)", bg=YELLOW, fg=GREEN,
-        font=(FONT_NAME, 20, "bold")
-    )  # tytuł napisu nad obrazkiem
-    title_label.grid(row=0, column=1)  # pozycja napisu nad obrazkiem
+root = tk.Tk()
+root.title("Panel Wyników - Układ Poziomy z Podpisami")
+root.config(padx=20, pady=20, bg=YELLOW)
 
-    start_button = Button(
-        self.window, width=7, height=2, text="Start", command=self.start_results_window
-    )  # przycisk start_button, inicjacja
-    start_button.grid(row=2, column=0)  # pozycja przycisku start_button w oknie
+# 1. LISTA TYTUŁÓW DLA PRZYCISKÓW (16 nazw)
+titles = [
+    "M1 Oblicz", "M2 Analiza", "M3 Wyniki", "M4 Projekt",
+    "M5 Rozstaw", "M6 Norma", "CSV Eksport", "PDF Druk",
+    "M1 Raport", "M2 Wykres", "M3 Dane", "M4 Koszty",
+    "M5 Moc", "M6 Klasa", "CSV Import", "ZAMKNIJ"
+]
 
-    reset_button = Button(
-        self.window, width=7, height=2, text="Reset"
-    )  # tu w nawiasie wstawisz command= i nazwa funkcji która coś robi )
-    reset_button.grid(row=2, column=2)  # pozycja przycisku reset_button w oknie
+# 2. LISTA PODPISÓW DLA MENU (8 nazw)
+menu_labels = [
+    "Rozmieszczenie", "Oprawa", "Klasa oświetleniowa", "Szerokość drogi", "Moduł", "Wys. montażu", "Nawis", "Pochylenie"
+]
 
-    select_folder_button = Button(
-        self.window, text="Wybierz folder z plikami .csv", command=self.select_csv_folder,
-        bg=GREEN, font=(FONT_NAME, 12)
+# --- SEKCJA GÓRNA: 8 PODPISÓW + 8 LIST ROZWIJANYCH ---
+top_frame = tk.Frame(root, bg=YELLOW)
+top_frame.pack(side="top", fill="x", pady=(0, 20))
+
+for c in range(8):
+    # Kontener dla pojedynczego zestawu (Label + OptionMenu)
+    m_container = tk.Frame(top_frame, bg=YELLOW)
+    m_container.grid(row=0, column=c, padx=5, sticky="n")
+
+    # Podpis nad menu
+    label = tk.Label(
+        m_container,
+        text=menu_labels[c],
+        bg=YELLOW,
+        fg=BLACK,
+        font=(FONT_NAME, 8, "bold")
     )
-    select_folder_button.grid(row=3, column=1, pady=10)
+    label.pack()
 
-    self.folder_label = Label(
-        self.window, text="", bg=YELLOW, fg=PINK, font=(FONT_NAME, 10), justify=LEFT, anchor="w"
-    )  # poprawienie wyglądu labela
-    self.folder_label.grid(row=4, column=1, pady=5)
+    # Menu rozwijane
+    v = tk.StringVar(root)
+    v.set("Wybierz")
+    opt = tk.OptionMenu(m_container, v, "Opcja 1", "Opcja 2", "Reset")
+    opt.config(bg=PINK, font=(FONT_NAME, 8), width=10)
+    opt.pack(pady=(2, 0))
+
+# --- SEKCJA ŚRODKOWA: WIZUALIZACJA ---
+mid_frame = tk.Frame(root, width=900, height=350, bg="white", highlightthickness=2, highlightbackground=RED)
+mid_frame.pack(fill="both", expand=True, pady=10)
+mid_frame.pack_propagate(False)
+
+tk.Label(
+    mid_frame,
+    text="OBSZAR WIZUALIZACJI / WYKRESÓW",
+    bg="white",
+    font=(FONT_NAME, 16, "bold")
+).pack(expand=True)
+
+# --- SEKCJA DOLNA: SIATKA PRZYCISKÓW 2x8 ---
+bottom_frame = tk.Frame(root, bg=YELLOW)
+bottom_frame.pack(side="bottom", fill="x", pady=(10, 0))
+
+# Konfiguracja kolumn, aby przyciski były równe i wypełniały szerokość
+for i in range(8):
+    bottom_frame.grid_columnconfigure(i, weight=1)
+
+for i in range(16):
+    row = 0 if i < 8 else 1  # 0-7 wiersz górny, 8-15 wiersz dolny
+    col = i % 8
+
+    btn = tk.Button(
+        bottom_frame,
+        text=titles[i],
+        bg=GREEN,
+        font=(FONT_NAME, 8, "bold"),
+        height=2
+    )
+    btn.grid(row=row, column=col, padx=2, pady=2, sticky="nsew")
+
+root.mainloop()
