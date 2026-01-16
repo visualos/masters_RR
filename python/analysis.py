@@ -172,4 +172,5 @@ class AnalysisCalculator:
         self.convert_all_to_parquet()
         print("\nWSZYSTKIE DANE SĄ GOTOWE W FORMACIE BINARNYM.")
 
-
+    def print_madafaka(self):
+        print('madafaka')

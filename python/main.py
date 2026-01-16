@@ -5,7 +5,7 @@ from analysis import AnalysisCalculator
 analysis_calculator = AnalysisCalculator()
 
 # 2. Tworzymy serce (GUI) i dajemy mu dostęp do mózgu
-app = AnalyzerGUI(calculator=analysis_calculator)
+app = AnalyzerGUI(engine=analysis_calculator)
 
 # 3. Odpalamy
 app.run()
