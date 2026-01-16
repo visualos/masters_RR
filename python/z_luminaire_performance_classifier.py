@@ -9,7 +9,7 @@ from tkinter import messagebox, ttk
 # --- KONFIGURACJA ŚCIEŻEK ---
 base_path = os.path.dirname(__file__)
 # Ścieżka zakłada, że skrypt jest w folderze obok folderu 'relux'
-input_file = os.path.join(base_path, '..', 'relux', 'relux_calc', 'wycinek_100k_rows.csv')
+input_file = os.path.join(base_path, '..', 'relux', '100k_rows_sample', 'wycinek_100k_rows.csv')
 
 class LuminaireApp:
     def __init__(self, root):
